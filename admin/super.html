@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Super Admin | AUM Tech</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23ff5f57'/><text x='50' y='68' font-size='55' text-anchor='middle' fill='white' font-weight='bold'>A</text></svg>">
+<link rel="stylesheet" href="../public-website/css/style.css">
+<link rel="stylesheet" href="../client-portal/css/portal.css">
+<link rel="stylesheet" href="css/admin.css">
+<link rel="manifest" href="manifest.json">
+</head>
+<body>
+<div class="portal">
+  <aside class="sidebar" id="sideMenu">
+    <a href="operations.html" class="logo"><span class="logo-box" style="background:linear-gradient(135deg,#ff5f57,#7c3aed)">⚡</span>AUM<span class="gradient-text">SUPER</span></a>
+    <div class="side-section">Governance</div>
+    <button class="side-link active" data-tab="analytics" data-title="Platform Analytics"><span class="ico">📊</span>Analytics</button>
+    <button class="side-link" data-tab="general" data-title="General Settings"><span class="ico">🌐</span>General Settings</button>
+    <button class="side-link" data-tab="users" data-title="User Management"><span class="ico">👥</span>Users</button>
+    <button class="side-link" data-tab="roles" data-title="Roles & Permissions"><span class="ico">🛡</span>Roles & Permissions</button>
+    <div class="side-section">System</div>
+    <button class="side-link" data-tab="settings" data-title="Company & Security Settings"><span class="ico">⚙️</span>Settings</button>
+    <button class="side-link" data-tab="audit" data-title="Audit Logs"><span class="ico">📋</span>Audit Logs</button>
+    <button class="side-link" data-tab="config" data-title="System Configuration"><span class="ico">🔧</span>Configuration</button>
+    <div class="sidebar-footer">
+      <div class="user-chip"><span class="user-av" style="background:linear-gradient(135deg,#ff5f57,#7c3aed)" id="superAv">S</span>
+        <div style="min-width:0"><div class="nm">Super Admin</div><div class="rl" id="superEmail">—</div></div>
+      </div>
+      <button class="side-link" id="logoutBtn" style="margin-top:10px"><span class="ico">🚪</span>Logout</button>
+    </div>
+  </aside>
+  <div class="side-overlay" id="sideOverlay"></div>
+  <main class="main-area">
+    <div class="mob-top"><button class="btn btn-ghost" id="mobBurger" style="padding:9px 16px">☰ Menu</button><strong>AUM Super Admin</strong></div>
+    <div class="topbar"><div><h1 id="pageTitle">Platform Analytics</h1><div class="crumb">Super Admin / System Governance</div></div>
+      <a href="operations.html" class="btn btn-ghost" style="padding:11px 24px">← Operations</a></div>
+    
+
+<!-- GENERAL SETTINGS -->
+<div class="ptab" id="tab-general">
+  <div class="section-head" style="margin-bottom:24px;text-align:left">
+    <h2 style="font-size:1.5rem">🌐 General Settings</h2>
+    <p>Control dukkan tsarin — website, portal, da admin — daga wannan shafi ɗaya. Changes save instantly & apply live.</p>
+  </div>
+  <form id="generalForm">
+    <div class="set-cols" style="display:grid;grid-template-columns:1fr 1fr;gap:22px">
+      <div class="card">
+        <h3 style="margin-bottom:16px">🏢 Branding</h3>
+        <div class="form-group"><label>Company Name</label><input name="companyName" placeholder="AUM Technology Company"></div>
+        <div class="form-group"><label>Tagline / Site Title</label><input name="tagline" placeholder="We Build Digital Solutions"></div>
+        <div class="form-row">
+          <div class="form-group"><label>Accent Color</label><input name="accentColor" type="color" value="#00d4ff" style="height:48px;padding:6px;cursor:pointer"></div>
+          <div class="form-group"><label>Default Language</label><select name="defaultLanguage"><option value="en">English</option><option value="ha">Hausa</option><option value="ar">العربية (RTL)</option></select></div>
+        </div>
+        <div class="form-group"><label>Currency Symbol</label><input name="currency" placeholder="₦ (NGN)"></div>
+        <div class="form-group" style="display:flex;align-items:center;gap:12px">
+          <input type="checkbox" name="announcementEnabled" id="annEn" style="width:20px;height:20px;accent-color:var(--primary)">
+          <label for="annEn" style="margin:0">Show Announcement Banner</label>
+        </div>
+        <div class="form-group"><label>Announcement Text</label><input name="announcementText" placeholder="e.g. 🔥 20% discount on all projects this month!"></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:16px">📞 Contact & Socials</h3>
+        <div class="form-group"><label>Support Email</label><input name="supportEmail" placeholder="hello@aumtech.com"></div>
+        <div class="form-group"><label>Phone</label><input name="phone" placeholder="+234 800 000 0000"></div>
+        <div class="form-group"><label>WhatsApp Number</label><input name="whatsapp" placeholder="2348000000000"></div>
+        <div class="form-group"><label>Office Address</label><input name="address" placeholder="Sokoto, Nigeria"></div>
+        <div class="form-group"><label>Facebook URL</label><input name="social_facebook" placeholder="https://facebook.com/..."></div>
+        <div class="form-group"><label>X (Twitter) URL</label><input name="social_twitter" placeholder="https://x.com/..."></div>
+        <div class="form-group"><label>LinkedIn URL</label><input name="social_linkedin" placeholder="https://linkedin.com/..."></div>
+        <div class="form-group"><label>Instagram URL</label><input name="social_instagram" placeholder="https://instagram.com/..."></div>
+        <div class="form-group"><label>GitHub URL</label><input name="social_github" placeholder="https://github.com/..."></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:22px">
+      <h3 style="margin-bottom:16px">💳 Payments</h3>
+      <div class="form-row">
+        <div class="form-group"><label>Paystack Public Key</label><input name="paystackPublicKey" placeholder="pk_test_... / pk_live_..."></div>
+        <div class="form-group"><label>Timezone</label><input name="timezone" placeholder="Africa/Lagos"></div>
+      </div>
+      <p style="color:var(--muted);font-size:.8rem;margin-bottom:16px">🔒 Ba tare da redeploy ba — portal yana karanta key ɗin nan take (public key ne kawai, sirri ɗin ka tsaya a server ɗinka).</p>
+      <button class="btn btn-primary" style="padding:14px 40px">💾 Save All Settings</button>
+      <div class="form-msg" id="generalFormMsg"></div>
+    </div>
+  </form>
+</div>
+
+<!-- ANALYTICS -->
+<div class="ptab active" id="tab-analytics">
+  <div class="stat-cards">
+    <div class="stat-card"><span class="stat-ico" style="background:rgba(0,212,255,.12)">👥</span><div><h3 id="statUsers">0</h3><p>Total Users</p></div></div>
+    <div class="stat-card"><span class="stat-ico" style="background:rgba(124,58,237,.15)">🛡</span><div><h3 id="statAdmins">0</h3><p>Staff/Admins</p></div></div>
+    <div class="stat-card"><span class="stat-ico" style="background:rgba(34,224,122,.12)">📥</span><div><h3 id="count-leads">0</h3><p>Leads</p></div></div>
+    <div class="stat-card"><span class="stat-ico" style="background:rgba(254,188,46,.12)">📁</span><div><h3 id="count-projects">0</h3><p>Projects</p></div></div>
+    <div class="stat-card"><span class="stat-ico" style="background:rgba(255,95,87,.12)">💰</span><div><h3 id="analyticsRevenue">₦0</h3><p>Total Revenue</p></div></div>
+  </div>
+  <div class="stat-cards">
+    <div class="stat-card"><span class="stat-ico" style="background:rgba(0,212,255,.12)">🤝</span><div><h3 id="count-clients">0</h3><p>Clients</p></div></div>
+    <div class="stat-card"><span class="stat-ico" style="background:rgba(34,224,122,.12)">🧾</span><div><h3 id="count-invoices">0</h3><p>Invoices</p></div></div>
+    <div class="stat-card"><span class="stat-ico" style="background:rgba(254,188,46,.12)">🎫</span><div><h3 id="count-tickets">0</h3><p>Tickets</p></div></div>
+    <div class="stat-card"><span class="stat-ico" style="background:rgba(124,58,237,.15)">📋</span><div><h3 id="statAudit">0</h3><p>Audit Entries</p></div></div>
+  </div>
+  <div class="card"><h3 style="margin-bottom:14px">📈 Quick Insights</h3>
+    <p style="color:var(--muted);font-size:.9rem">👥 <strong id="statUsersClients">0</strong> registered clients · 👤 Staff ratio: <strong id="statAdmins2">0</strong> admins/staff</p>
+    <p style="color:var(--muted);font-size:.9rem;margin-top:8px">💡 Detailed charts (revenue trends, conversion funnels, user growth) will be added in Phase 6 with a proper charting library.</p>
+  </div>
+</div>
+
+<!-- USERS -->
+<div class="ptab" id="tab-users">
+  <div class="card" style="margin-bottom:22px">
+    <h3 style="margin-bottom:16px">➕ Create User Account</h3>
+    <form class="mini-form" id="createUserForm">
+      <input name="name" placeholder="Full name *" required>
+      <input name="email" type="email" placeholder="Email *" required>
+      <input name="password" type="password" placeholder="Temp password (min 6) *" required>
+      <select name="role"><option>staff</option><option>admin</option><option>client</option><option>superadmin</option></select>
+      <button class="btn btn-primary" style="padding:12px 24px">Create User</button>
+    </form>
+    <div class="form-msg" id="cuMsg"></div>
+    <p style="color:var(--muted);font-size:.8rem;margin-top:10px">💡 Creates the account without logging you out (secondary Firebase app). User should change password after first login.</p>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px">
+      <h3>All Users</h3>
+      <select id="userRoleFilter" style="background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:10px 16px;color:var(--text);font-family:inherit">
+        <option value="all">All roles</option><option value="superadmin">superadmin</option><option value="admin">admin</option><option value="staff">staff</option><option value="client">client</option>
+      </select>
+    </div>
+    <div style="overflow-x:auto"><table class="p-table"><thead><tr><th>User</th><th>Role</th><th>Joined</th><th>Status</th><th></th></tr></thead><tbody id="usersBody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- ROLES -->
+<div class="ptab" id="tab-roles">
+  <div class="card">
+    <h3 style="margin-bottom:8px">🛡 Roles & Permissions Matrix</h3>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:18px">Tick/untick permissions per role per module. Changes save instantly to Firestore (<code>roles/{role}</code>) and are logged in Audit Logs.</p>
+    <div style="overflow-x:auto" id="rolesMatrix"></div>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div class="ptab" id="tab-settings">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px" class="set-cols">
+    <div class="card">
+      <h3 style="margin-bottom:16px">🏢 Company Settings</h3>
+      <form id="companyForm">
+        <div class="form-group"><label>Company Name</label><input name="companyName" placeholder="AUM Technology Company"></div>
+        <div class="form-group"><label>Support Email</label><input name="supportEmail" placeholder="support@aumtech.com"></div>
+        <div class="form-group"><label>Phone</label><input name="phone" placeholder="+234 ..."></div>
+        <div class="form-group"><label>Address</label><input name="address" placeholder="Sokoto, Nigeria"></div>
+        <div class="form-row">
+          <div class="form-group"><label>Currency</label><input name="currency" placeholder="₦ (NGN)"></div>
+          <div class="form-group"><label>Tax Rate (%)</label><input name="taxRate" type="number" placeholder="7.5"></div>
+        </div>
+        <button class="btn btn-primary">Save Company Settings</button>
+        <div class="form-msg" id="companyFormMsg"></div>
+      </form>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:16px">🔐 Security Settings</h3>
+      <form id="securityForm">
+        <div class="form-group" style="display:flex;align-items:center;gap:12px">
+          <input type="checkbox" name="enforce2FA" id="enforce2FA" style="width:20px;height:20px;accent-color:var(--primary)">
+          <label for="enforce2FA" style="margin:0">Enforce 2FA for all staff (planned — Phase 6)</label>
+        </div>
+        <div class="form-group" style="display:flex;align-items:center;gap:12px">
+          <input type="checkbox" name="strongPasswords" id="strongPw" style="width:20px;height:20px;accent-color:var(--primary)">
+          <label for="strongPw" style="margin:0">Require strong passwords (8+ chars, mixed)</label>
+        </div>
+        <div class="form-group"><label>Password Min Length</label><input name="pwMinLength" type="number" placeholder="6"></div>
+        <div class="form-group"><label>Session Timeout (hours)</label><input name="sessionTimeout" type="number" placeholder="72"></div>
+        <div class="form-group"><label>Allowed IP Whitelist (comma separated)</label><input name="ipWhitelist" placeholder="optional"></div>
+        <button class="btn btn-primary">Save Security Settings</button>
+        <div class="form-msg" id="securityFormMsg"></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- AUDIT -->
+<div class="ptab" id="tab-audit">
+  <div class="card">
+    <h3 style="margin-bottom:8px">📋 Audit Logs</h3>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:16px">Every sensitive action across the platform — role changes, user suspensions, config changes, project status updates.</p>
+    <div style="overflow-x:auto"><table class="p-table"><thead><tr><th>Time</th><th>Action</th><th>By</th><th>Entity</th><th>New Value</th></tr></thead><tbody id="auditBody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- CONFIG -->
+<div class="ptab" id="tab-config">
+  <div id="maintBanner" style="display:none;background:rgba(255,95,87,.12);border:1px solid rgba(255,95,87,.4);color:#ff8f6b;padding:14px 20px;border-radius:12px;margin-bottom:22px;font-weight:600">⚠ MAINTENANCE MODE IS ON — clients see a maintenance notice on the portal.</div>
+  <div class="card" style="max-width:640px">
+    <h3 style="margin-bottom:8px">🔧 Feature Flags</h3>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:20px">Enable or disable modules instantly. No redeploy needed.</p>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <label style="display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 18px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;cursor:pointer"><span>🛠 Maintenance Mode</span><input type="checkbox" data-flag="maintenanceMode" style="width:22px;height:22px;accent-color:var(--primary)"></label>
+      <label style="display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 18px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;cursor:pointer"><span>📝 Blog Module</span><input type="checkbox" data-flag="blogEnabled" checked style="width:22px;height:22px;accent-color:var(--primary)"></label>
+      <label style="display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 18px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;cursor:pointer"><span>📥 New Client Registrations</span><input type="checkbox" data-flag="registrationOpen" checked style="width:22px;height:22px;accent-color:var(--primary)"></label>
+      <label style="display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 18px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;cursor:pointer"><span>💳 Online Payments (Paystack)</span><input type="checkbox" data-flag="paymentsEnabled" checked style="width:22px;height:22px;accent-color:var(--primary)"></label>
+      <label style="display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 18px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;cursor:pointer"><span>🎫 Support Tickets</span><input type="checkbox" data-flag="ticketsEnabled" checked style="width:22px;height:22px;accent-color:var(--primary)"></label>
+    </div>
+    <p style="color:var(--muted);font-size:.8rem;margin-top:18px">💡 Portal reads these flags — e.g. maintenance notice shows automatically. Every toggle is audit-logged.</p>
+  </div>
+</div>
+
+  </main>
+</div>
+<script src="js/ui.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="../public-website/firebase/config.js"></script>
+<script src="js/super.js"></script>
+<script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0){navigator.serviceWorker.register("sw.js").catch(function(){})}</script>
+</body>
+</html>

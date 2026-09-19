@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operations | AUM Tech Admin</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%237c3aed'/><text x='50' y='68' font-size='55' text-anchor='middle' fill='white' font-weight='bold'>A</text></svg>">
+<link rel="stylesheet" href="../public-website/css/style.css">
+<link rel="stylesheet" href="../client-portal/css/portal.css">
+<link rel="stylesheet" href="css/admin.css">
+<link rel="manifest" href="manifest.json">
+</head>
+<body>
+<div class="portal">
+  <aside class="sidebar" id="sideMenu">
+    <a href="../public-website/index.html" class="logo"><span class="logo-box" style="background:linear-gradient(135deg,#7c3aed,#00d4ff)">⚡</span>AUM<span class="gradient-text">ADMIN</span></a>
+    <div class="side-section">Operations</div>
+    <button class="side-link active" data-tab="overview" data-title="Operations Overview"><span class="ico">📊</span>Overview</button>
+    <button class="side-link" data-tab="leads" data-title="CRM — Leads Pipeline"><span class="ico">📥</span>Leads<span class="side-badge" id="leadBadge">0</span></button>
+    <button class="side-link" data-tab="clients" data-title="Clients Database"><span class="ico">👥</span>Clients</button>
+    <button class="side-link" data-tab="projects" data-title="Project Management"><span class="ico">📁</span>Projects</button>
+    <button class="side-link" data-tab="inbox" data-title="Message Inbox"><span class="ico">📥</span>Inbox<span class="side-badge" id="inboxBadge">0</span></button>
+    <button class="side-link" data-tab="invoices" data-title="Invoices"><span class="ico">🧾</span>Invoices</button>
+    <button class="side-link" data-tab="blog" data-title="Blog Manager"><span class="ico">📝</span>Blog</button>
+    <button class="side-link" data-tab="tasks" data-title="Task Board"><span class="ico">✅</span>Tasks</button>
+    <div class="side-section">Workspace</div>
+    <a class="side-link" href="super.html"><span class="ico">🛡</span>Super Admin</a>
+    <a class="side-link" href="dev-workspace.html"><span class="ico">🛠</span>Dev Workspace</a>
+    <div class="side-section">Company</div>
+    <button class="side-link" data-tab="team" data-title="Team & Roles"><span class="ico">🧑‍💼</span>Team</button>
+    <button class="side-link" data-tab="finance" data-title="Finance — Income & Expenses"><span class="ico">💰</span>Finance</button>
+    <button class="side-link" data-tab="reports" data-title="Reports & Export"><span class="ico">📈</span>Reports</button>
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <span class="user-av" id="adminAv">A</span>
+        <div style="min-width:0"><div class="nm" id="adminName">...</div><div class="rl" id="adminRole">admin</div></div>
+      </div>
+      <button class="side-link" id="logoutBtn" style="margin-top:10px"><span class="ico">🚪</span>Logout</button>
+    </div>
+  </aside>
+  <div class="side-overlay" id="sideOverlay"></div>
+  <main class="main-area">
+    <div class="mob-top"><button class="btn btn-ghost" id="mobBurger" style="padding:9px 16px">☰ Menu</button><strong>AUM Admin</strong></div>
+    <div class="topbar"><div><h1 id="pageTitle">Operations Overview</h1><div class="crumb">Company Operations / Admin</div></div></div>
+    
+<!-- OVERVIEW -->
+<div class="ptab active" id="tab-overview">
+  <div class="stat-cards">
+    <div class="stat-card"><span class="stat-ico" style="background:rgba(0,212,255,.12)">📥</span><div><h3 id="statLeads">0</h3><p>Total Leads</p></div></div>
+    <div class="stat-card"><span class="stat-ico" style="background:rgba(34,224,122,.12)">👥</span><div><h3 id="statClients">0</h3><p>Clients</p></div></div>
+    <div class="stat-card"><span class="stat-ico" style="background:rgba(254,188,46,.12)">📁</span><div><h3 id="statProjects">0</h3><p>Projects (<span id="statActive">0</span> active)</p></div></div>
+    <div class="stat-card"><span class="stat-ico" style="background:rgba(124,58,237,.15)">💰</span><div><h3 id="totalIncome">₦0</h3><p>Total Income</p></div></div>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+      <h3>📥 Latest Leads</h3>
+      <button class="btn btn-ghost" style="padding:9px 20px" data-export="leads">⬇ Export CSV</button>
+    </div>
+    <div style="overflow-x:auto"><table class="p-table"><thead><tr><th>Name</th><th>Email</th><th>Service</th><th>Budget</th><th>Status</th></tr></thead><tbody id="recentLeads"></tbody></table></div>
+  </div>
+</div>
+
+<!-- LEADS KANBAN -->
+<div class="ptab" id="tab-leads">
+  <div class="card" style="margin-bottom:22px">
+    <h3 style="margin-bottom:16px">➕ Add Lead Manually</h3>
+    <form class="mini-form" id="addLeadForm">
+      <input name="name" placeholder="Full name *" required>
+      <input name="email" type="email" placeholder="Email *" required>
+      <input name="phone" placeholder="Phone">
+      <select name="service"><option>Web Development</option><option>Mobile App</option><option>Software System</option><option>AI Solution</option><option>Cloud & DevOps</option><option>Other</option></select>
+      <select name="source"><option>Manual</option><option>WhatsApp</option><option>Referral</option><option>Phone Call</option></select>
+      <input name="budget" placeholder="Budget (e.g. ₦300,000)">
+      <button class="btn btn-primary" style="padding:12px 24px">Add Lead</button>
+    </form>
+    <p style="color:var(--muted);font-size:.82rem">💡 <strong>Tip:</strong> Ja (drag) katin lead daga column ɗaya zuwa wata — status zai updated kai tsaye.</p>
+  </div>
+  <div class="kanban">
+    <div class="kb-col" data-status="New" id="kb-new"><div class="kb-head"><span><span class="dot-n d-new"></span>New</span><span class="kb-count">0</span></div><div class="kb-cards"></div></div>
+    <div class="kb-col" data-status="Contacted" id="kb-contacted"><div class="kb-head"><span><span class="dot-n d-contact"></span>Contacted</span><span class="kb-count">0</span></div><div class="kb-cards"></div></div>
+    <div class="kb-col" data-status="Qualified" id="kb-qualified"><div class="kb-head"><span><span class="dot-n d-qualified"></span>Qualified</span><span class="kb-count">0</span></div><div class="kb-cards"></div></div>
+    <div class="kb-col" data-status="Converted" id="kb-converted"><div class="kb-head"><span><span class="dot-n d-converted"></span>Converted</span><span class="kb-count">0</span></div><div class="kb-cards"></div></div>
+  </div>
+</div>
+
+<!-- CLIENTS -->
+<div class="ptab" id="tab-clients">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px">
+      <h3>Clients Database</h3><button class="btn btn-ghost" style="padding:9px 20px" data-export="clients">⬇ Export CSV</button>
+    </div>
+    <div style="overflow-x:auto"><table class="p-table"><thead><tr><th>Client</th><th>Company</th><th>Email</th><th>Phone</th><th>Lifetime Value</th></tr></thead><tbody id="clientsBody"></tbody></table></div>
+  </div>
+</div>
+
+
+
+<!-- INVOICES -->
+<div class="ptab" id="tab-invoices">
+  <div class="card" style="margin-bottom:22px">
+    <h3 style="margin-bottom:16px">➕ Create Invoice</h3>
+    <p style="color:var(--muted);font-size:.82rem;margin-bottom:14px">Invoice yana ƙirƙirawa nan take kuma yana bayyana a Client Portal ɗin client ɗin (tare da Pay Now button).</p>
+    <form class="mini-form" id="addInvoiceForm">
+      <select name="clientId" id="invClientSelect" required><option value="">Loading clients…</option></select>
+      <input name="description" placeholder="Description (e.g. Website 50% milestone) *" required>
+      <input name="amount" type="number" placeholder="Amount (₦) *" required>
+      <input name="dueDate" type="date">
+      <button class="btn btn-primary" style="padding:12px 24px">Create & Send 🧾</button>
+    </form>
+  </div>
+  <div class="card"><h3 style="margin-bottom:16px">All Invoices</h3>
+    <div style="overflow-x:auto"><table class="p-table"><thead><tr><th>Invoice #</th><th>Client</th><th>Description</th><th>Amount</th><th>Due</th><th>Status</th><th></th></tr></thead><tbody id="adminInvoicesBody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- BLOG CMS -->
+<div class="ptab" id="tab-blog">
+  <div class="card" style="margin-bottom:22px">
+    <h3 style="margin-bottom:16px" id="blogFormTitle">➕ New Blog Post</h3>
+    <form id="blogForm">
+      <input type="hidden" name="id">
+      <div class="form-row">
+        <div class="form-group"><label>Title *</label><input name="title" id="blogTitle" required placeholder="Post title"></div>
+        <div class="form-group"><label>Slug (URL)</label><input name="slug" id="blogSlug" placeholder="auto-from-title"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Category</label><select name="category"><option>Web Dev</option><option>Mobile</option><option>AI</option><option>Cloud</option><option>Security</option><option>E-Commerce</option></select></div>
+        <div class="form-group"><label>Cover Emoji</label><input name="emoji" placeholder="🔥" maxlength="4"></div>
+      </div>
+      <div class="form-group"><label>Excerpt</label><input name="excerpt" placeholder="Short summary shown on the card"></div>
+      <div class="form-group"><label>Content *</label><textarea name="content" required placeholder="Write your article here... (plain text, line breaks preserved)" style="min-height:200px"></textarea></div>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer"><input type="checkbox" name="published" checked style="width:20px;height:20px;accent-color:var(--primary)"> Published (visible on website)</label>
+        <button class="btn btn-primary">💾 Save Post</button>
+        <button type="button" class="btn btn-ghost" id="blogCancelEdit" style="display:none">Cancel Edit</button>
+      </div>
+    </form>
+  </div>
+  <div class="card"><h3 style="margin-bottom:16px">Posts</h3>
+    <div style="overflow-x:auto"><table class="p-table"><thead><tr><th>Post</th><th>Category</th><th>Status</th><th>Date</th><th></th></tr></thead><tbody id="blogBody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- INBOX -->
+<div class="ptab" id="tab-inbox">
+  <div class="card" style="padding:0;overflow:hidden">
+    <div class="inbox-wrap">
+      <div class="inbox-list" id="threadList"></div>
+      <div class="inbox-main">
+        <div class="chat-box" id="inboxChat"></div>
+        <form class="chat-input" id="inboxForm">
+          <input id="inboxInput" placeholder="Type your reply..." autocomplete="off">
+          <button class="btn btn-primary" style="padding:12px 26px">Send ➤</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <p style="color:var(--muted);font-size:.8rem;margin-top:12px">💬 Duk messages daga Client Portal suna isa nan real-time. Blue ticks ✓✓ = client ya karanta reply ɗinka.</p>
+</div>
+
+<!-- PROJECTS -->
+<div class="ptab" id="tab-projects">
+  <div class="card">
+    <h3 style="margin-bottom:18px">All Projects <small style="color:var(--muted);font-weight:400">— change status from the dropdown (auto-saves)</small></h3>
+    <div style="overflow-x:auto"><table class="p-table"><thead><tr><th>Project</th><th>Type</th><th>Status</th><th>Progress</th><th>Budget</th></tr></thead><tbody id="adminProjectsBody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- TASKS -->
+<div class="ptab" id="tab-tasks">
+  <div class="card" style="margin-bottom:22px">
+    <h3 style="margin-bottom:16px">➕ Add Task</h3>
+    <form class="mini-form" id="addTaskForm">
+      <input name="title" placeholder="Task title *" required>
+      <input name="assignee" placeholder="Assignee (name)">
+      <input name="project" placeholder="Related project">
+      <select name="priority"><option>Medium</option><option>High</option><option>Low</option></select>
+      <button class="btn btn-primary" style="padding:12px 24px">Add Task</button>
+    </form>
+  </div>
+  <div class="kanban" id="taskBoard" style="grid-template-columns:repeat(3,1fr)"></div>
+</div>
+
+<!-- TEAM -->
+<div class="ptab" id="tab-team">
+  <div class="card">
+    <h3 style="margin-bottom:8px">Team & User Roles</h3>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:18px">Change any user's role from the dropdown — takes effect immediately across the whole system.</p>
+    <div style="overflow-x:auto"><table class="p-table"><thead><tr><th>User</th><th>Role</th><th>Status</th></tr></thead><tbody id="teamBody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- FINANCE -->
+<div class="ptab" id="tab-finance">
+  <div class="stat-cards">
+    <div class="stat-card"><span class="stat-ico" style="background:rgba(34,224,122,.12)">📈</span><div><h3 id="totalIncome2">₦0</h3><p>Total Income</p></div></div>
+    <div class="stat-card"><span class="stat-ico" style="background:rgba(255,95,87,.12)">📉</span><div><h3 id="totalExpenses">₦0</h3><p>Total Expenses</p></div></div>
+    <div class="stat-card"><span class="stat-ico" style="background:rgba(0,212,255,.12)">💵</span><div><h3 id="netProfit">₦0</h3><p>Net Profit</p></div></div>
+  </div>
+  <div class="card" style="margin-bottom:22px">
+    <h3 style="margin-bottom:16px">📊 Revenue by Month</h3>
+    <div class="bar-chart" id="revenueChart"></div>
+  </div>
+  <div class="card" style="margin-bottom:22px">
+    <h3 style="margin-bottom:16px">➕ Record Expense</h3>
+    <form class="mini-form" id="addExpenseForm">
+      <input name="description" placeholder="Description *" required>
+      <select name="category"><option>Salaries</option><option>Tools & Software</option><option>Internet & Power</option><option>Office</option><option>Marketing</option><option>Other</option></select>
+      <input name="amount" type="number" placeholder="Amount (₦) *" required>
+      <button class="btn btn-primary" style="padding:12px 24px">Add Expense</button>
+    </form>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px" class="fin-cols">
+    <div class="card"><h3 style="margin-bottom:14px">💳 Payments Received</h3>
+      <div style="overflow-x:auto"><table class="p-table"><thead><tr><th>Invoice</th><th>Amount</th><th>Method</th><th>Date</th></tr></thead><tbody id="paymentsBody"></tbody></table></div></div>
+    <div class="card"><h3 style="margin-bottom:14px">💸 Expenses</h3>
+      <div style="overflow-x:auto"><table class="p-table"><thead><tr><th>Description</th><th>Category</th><th>Amount</th><th>Date</th></tr></thead><tbody id="expensesBody"></tbody></table></div></div>
+  </div>
+</div>
+
+<!-- REPORTS -->
+<div class="ptab" id="tab-reports">
+  <div class="section-head" style="margin-bottom:30px;text-align:left">
+    <h2 style="font-size:1.6rem">📈 Reports & Data Export</h2>
+    <p>Download your business data as CSV — opens in Excel, Google Sheets, etc.</p>
+  </div>
+  <div class="report-grid">
+    <div class="card"><div style="font-size:2.2rem;margin-bottom:12px">📥</div><h4 style="margin-bottom:8px">Leads Report</h4><p style="color:var(--muted);font-size:.86rem;margin-bottom:16px">All leads with source, budget & status.</p><button class="btn btn-primary" style="width:100%;justify-content:center" data-export="leads">⬇ Download CSV</button></div>
+    <div class="card"><div style="font-size:2.2rem;margin-bottom:12px">👥</div><h4 style="margin-bottom:8px">Clients Report</h4><p style="color:var(--muted);font-size:.86rem;margin-bottom:16px">Full client database with contact details.</p><button class="btn btn-primary" style="width:100%;justify-content:center" data-export="clients">⬇ Download CSV</button></div>
+    <div class="card"><div style="font-size:2.2rem;margin-bottom:12px">📁</div><h4 style="margin-bottom:8px">Projects Report</h4><p style="color:var(--muted);font-size:.86rem;margin-bottom:16px">All projects with status & budget.</p><button class="btn btn-primary" style="width:100%;justify-content:center" data-export="projects">⬇ Download CSV</button></div>
+    <div class="card"><div style="font-size:2.2rem;margin-bottom:12px">💳</div><h4 style="margin-bottom:8px">Payments Report</h4><p style="color:var(--muted);font-size:.86rem;margin-bottom:16px">Income records for accounting.</p><button class="btn btn-primary" style="width:100%;justify-content:center" data-export="payments">⬇ Download CSV</button></div>
+  </div>
+</div>
+
+  </main>
+</div>
+<script src="js/ui.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="../public-website/firebase/config.js"></script>
+<script src="js/admin.js"></script>
+<script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0){navigator.serviceWorker.register("sw.js").catch(function(){})}</script>
+</body>
+</html>

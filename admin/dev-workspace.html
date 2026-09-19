@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Developer Workspace | AUM Tech</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2322e07a'/><text x='50' y='68' font-size='55' text-anchor='middle' fill='white' font-weight='bold'>A</text></svg>">
+<link rel="stylesheet" href="../public-website/css/style.css">
+<link rel="stylesheet" href="../client-portal/css/portal.css">
+<link rel="stylesheet" href="css/admin.css">
+<link rel="manifest" href="manifest.json">
+</head>
+<body>
+<div class="portal">
+  <aside class="sidebar" id="sideMenu">
+    <a href="operations.html" class="logo"><span class="logo-box" style="background:linear-gradient(135deg,#22e07a,#00d4ff)">⚡</span>AUM<span class="gradient-text">DEV</span></a>
+    <div class="side-section">Workspace</div>
+    <button class="side-link active" data-tab="overview" data-title="Developer Overview"><span class="ico">📊</span>Overview</button>
+    <button class="side-link" data-tab="repos" data-title="Repositories"><span class="ico">📦</span>Repositories</button>
+    <button class="side-link" data-tab="envs" data-title="Environments"><span class="ico">🖥</span>Environments</button>
+    <button class="side-link" data-tab="deploys" data-title="Deployments"><span class="ico">🚀</span>Deployments</button>
+    <div class="side-section">Tools</div>
+    <button class="side-link" data-tab="keys" data-title="API Keys Vault"><span class="ico">🔑</span>API Keys</button>
+    <button class="side-link" data-tab="logs" data-title="System Logs"><span class="ico">📜</span>Logs</button>
+    <button class="side-link" data-tab="monitors" data-title="Uptime Monitoring"><span class="ico">🌐</span>Monitoring</button>
+    <div class="sidebar-footer">
+      <div class="user-chip"><span class="user-av" style="background:linear-gradient(135deg,#22e07a,#00d4ff)">D</span>
+        <div style="min-width:0"><div class="nm">Dev Workspace</div><div class="rl">staff access</div></div>
+      </div>
+      <button class="side-link" id="logoutBtn" style="margin-top:10px"><span class="ico">🚪</span>Logout</button>
+    </div>
+  </aside>
+  <div class="side-overlay" id="sideOverlay"></div>
+  <main class="main-area">
+    <div class="mob-top"><button class="btn btn-ghost" id="mobBurger" style="padding:9px 16px">☰ Menu</button><strong>AUM Dev Workspace</strong></div>
+    <div class="topbar"><div><h1 id="pageTitle">Developer Overview</h1><div class="crumb">Developer Workspace / Internal Tools</div></div>
+      <a href="operations.html" class="btn btn-ghost" style="padding:11px 24px">← Operations</a></div>
+    
+<!-- OVERVIEW -->
+<div class="ptab active" id="tab-overview">
+  <div class="stat-cards">
+    <div class="stat-card"><span class="stat-ico" style="background:rgba(0,212,255,.12)">📦</span><div><h3 id="statRepos">0</h3><p>Repositories</p></div></div>
+    <div class="stat-card"><span class="stat-ico" style="background:rgba(34,224,122,.12)">🖥</span><div><h3 id="statEnvs">0</h3><p>Environments</p></div></div>
+    <div class="stat-card"><span class="stat-ico" style="background:rgba(254,188,46,.12)">🚀</span><div><h3 id="statDeploys">0</h3><p>Deployments</p></div></div>
+    <div class="stat-card"><span class="stat-ico" style="background:rgba(255,95,87,.12)">📜</span><div><h3 id="statLogs">0</h3><p>Log Entries</p></div></div>
+    <div class="stat-card"><span class="stat-ico" style="background:rgba(124,58,237,.15)">🌐</span><div><h3 id="statMonitors">0</h3><p>Monitors</p></div></div>
+  </div>
+  <div class="card"><h3 style="margin-bottom:16px">🚀 Recent Deployments</h3>
+    <div style="overflow-x:auto"><table class="p-table"><thead><tr><th>Project</th><th>Version</th><th>Environment</th><th>Status</th><th>By</th><th>Date</th><th></th></tr></thead><tbody id="deployBody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- REPOS -->
+<div class="ptab" id="tab-repos">
+  <div class="card" style="margin-bottom:22px">
+    <h3 style="margin-bottom:16px">➕ Add Repository</h3>
+    <form class="mini-form" id="addRepoForm">
+      <input name="name" placeholder="Repo name *" required>
+      <input name="url" placeholder="GitHub URL *" required>
+      <input name="tech" placeholder="Tech (comma separated: JS, Firebase)">
+      <select name="visibility"><option>Private</option><option>Public</option></select>
+      <input name="description" placeholder="Short description">
+      <button class="btn btn-primary" style="padding:12px 24px">Add Repo</button>
+    </form>
+  </div>
+  <div class="kanban" id="repoList" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr))"></div>
+</div>
+
+<!-- ENVS -->
+<div class="ptab" id="tab-envs">
+  <div class="card" style="margin-bottom:22px">
+    <h3 style="margin-bottom:16px">➕ Add Environment Setup</h3>
+    <form class="mini-form" id="addEnvForm">
+      <input name="project" placeholder="Project name *" required>
+      <input name="development" placeholder="Dev URL">
+      <input name="staging" placeholder="Staging URL">
+      <input name="production" placeholder="Production URL">
+      <input name="notes" placeholder="Notes / credentials hint">
+      <button class="btn btn-primary" style="padding:12px 24px">Add Environment</button>
+    </form>
+  </div>
+  <div class="kanban" id="envList" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))"></div>
+</div>
+
+<!-- DEPLOYS -->
+<div class="ptab" id="tab-deploys">
+  <div class="card" style="margin-bottom:22px">
+    <h3 style="margin-bottom:16px">🚀 Record Deployment</h3>
+    <form class="mini-form" id="addDeployForm">
+      <input name="project" placeholder="Project *" required>
+      <input name="version" placeholder="Version (e.g. 1.2.0) *" required>
+      <select name="environment"><option>development</option><option>staging</option><option>production</option></select>
+      <input name="notes" placeholder="Release notes">
+      <button class="btn btn-primary" style="padding:12px 24px">Deploy 🚀</button>
+    </form>
+  </div>
+  <div class="card"><h3 style="margin-bottom:16px">Deployment History</h3>
+    <div style="overflow-x:auto"><table class="p-table"><thead><tr><th>Project</th><th>Version</th><th>Env</th><th>Status</th><th>By</th><th>Date</th><th></th></tr></thead><tbody id="deployBody2"></tbody></table></div>
+  </div>
+</div>
+
+<!-- API KEYS -->
+<div class="ptab" id="tab-keys">
+  <div class="card" style="margin-bottom:22px">
+    <h3 style="margin-bottom:8px">➕ Store API Key</h3>
+    <p style="color:var(--muted);font-size:.82rem;margin-bottom:16px">⚠ Only the last 4 characters are displayed. Keys are stored in Firestore — enable proper rules before production use.</p>
+    <form class="mini-form" id="addKeyForm">
+      <input name="name" placeholder="Key name (e.g. Paystack Live) *" required>
+      <select name="service"><option>Payment</option><option>Firebase</option><option>Maps</option><option>SMS</option><option>Email</option><option>Other</option></select>
+      <input name="key" placeholder="Paste key *" required>
+      <input name="notes" placeholder="Notes">
+      <button class="btn btn-primary" style="padding:12px 24px">Store Key</button>
+    </form>
+  </div>
+  <div class="kanban" id="keyList" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr))"></div>
+</div>
+
+<!-- LOGS -->
+<div class="ptab" id="tab-logs">
+  <div class="card" style="margin-bottom:22px">
+    <h3 style="margin-bottom:16px">➕ Add Log Entry</h3>
+    <form class="mini-form" id="addLogForm">
+      <select name="level"><option>info</option><option>warn</option><option>error</option></select>
+      <input name="source" placeholder="Source (e.g. auth-api)">
+      <input name="message" placeholder="Log message *" required>
+      <button class="btn btn-primary" style="padding:12px 24px">Add Log</button>
+    </form>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:12px">
+      <div class="filter-bar" style="margin:0">
+        <button class="filter-btn active" data-level="all">All</button>
+        <button class="filter-btn" data-level="info">Info</button>
+        <button class="filter-btn" data-level="warn">Warnings</button>
+        <button class="filter-btn" data-level="error">Errors</button>
+      </div>
+      <input id="logSearch" placeholder="🔍 Search logs..." style="background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:10px 16px;color:var(--text);font-family:inherit;min-width:220px">
+    </div>
+    <div id="logList"></div>
+  </div>
+</div>
+
+<!-- MONITORS -->
+<div class="ptab" id="tab-monitors">
+  <div class="card" style="margin-bottom:22px">
+    <h3 style="margin-bottom:8px">➕ Add Monitor</h3>
+    <p style="color:var(--muted);font-size:.82rem;margin-bottom:16px">Client-side check (CORS-safe). Click "Check Now" — results & uptime % tracked automatically. 🔔 Cloud Function scheduled checks will be added at Phase 6.</p>
+    <form class="mini-form" id="addMonitorForm">
+      <input name="name" placeholder="Site name *" required>
+      <input name="url" placeholder="URL (e.g. https://client-site.com) *" required>
+      <button class="btn btn-primary" style="padding:12px 24px">Add Monitor</button>
+    </form>
+  </div>
+  <div class="kanban" id="monitorList" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr))"></div>
+</div>
+
+  </main>
+</div>
+<script src="js/ui.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="../public-website/firebase/config.js"></script>
+<script src="js/dev.js"></script>
+<script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0){navigator.serviceWorker.register("sw.js").catch(function(){})}</script>
+</body>
+</html>
