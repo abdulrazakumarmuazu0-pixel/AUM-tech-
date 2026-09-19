@@ -1,150 +1,121 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // ---------- HELPERS ----------
     function signedIn() { return request.auth != null; }
+    function userExists() { return signedIn() && exists(/databases/$(database)/documents/users/$(request.auth.uid)); }
     function role() {
-      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+      return userExists() ? get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role : null;
     }
-    function isStaff() { return signedIn() && role() in ['staff', 'admin', 'superadmin']; }
-    function isAdmin() { return signedIn() && role() in ['admin', 'superadmin']; }
-    function isSuper() { return signedIn() && role() == 'superadmin'; }
+    function isStaff() { return role() in ['staff', 'admin', 'superadmin']; }
+    function isAdmin() { return role() in ['admin', 'superadmin']; }
+    function isSuper() { return role() == 'superadmin'; }
     function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
-    function ownData(field) {
-      return signedIn() && resource.data[field] == request.auth.uid;
-    }
+    function ownsExisting(field) { return signedIn() && resource.data[field] == request.auth.uid; }
+    function ownsIncoming(field) { return signedIn() && request.resource.data[field] == request.auth.uid; }
 
-    // ---------- PUBLIC WEBSITE (no auth needed to SUBMIT only) ----------
     match /leads/{id} {
-      allow create: if true;                    // website + portal contact forms
-      allow read, update: if isStaff();         // CRM access
+      allow create: if request.resource.data.keys().hasAll(['name', 'email'])
+        && request.resource.data.email is string;
+      allow read, update: if isStaff();
       allow delete: if isAdmin();
     }
     match /newsletter/{id} {
-      allow create: if true;
+      allow create: if request.resource.data.email is string;
       allow read, delete: if isStaff();
     }
-    match /blog/{id} {
-      allow read: if true;
-      allow write: if isStaff();
-    }
-    match /portfolio/{id} {
-      allow read: if true;
-      allow write: if isStaff();
-    }
-    match /testimonials/{id} {
-      allow read: if true;
-      allow write: if isStaff();
-    }
+    match /blog/{id} { allow read: if true; allow write: if isStaff(); }
+    match /portfolio/{id} { allow read: if true; allow write: if isStaff(); }
+    match /testimonials/{id} { allow read: if true; allow write: if isStaff(); }
 
-    // ---------- USERS & ROLES ----------
     match /users/{uid} {
-      allow read: if isOwner(uid) || isStaff();              // staff see user list
-      allow create: if isOwner(uid);                          // self-registration
-      allow update: if isOwner(uid)                           // profile edits (not role!)
-        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'status']);
-      allow update: if isSuper();                             // superadmin: role/status changes
+      allow read: if isOwner(uid) || isStaff();
+      allow create: if isOwner(uid)
+        && request.resource.data.role == 'client';
+      allow update: if isSuper()
+        || (isOwner(uid) && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'status']));
       allow delete: if isSuper();
     }
-    match /roles/{id} {
-      allow read: if signedIn();
-      allow write: if isSuper();
-    }
+    match /roles/{id} { allow read: if signedIn(); allow write: if isSuper(); }
 
-    // ---------- CLIENT DATA (own only) ----------
     match /clients/{uid} {
       allow read: if isOwner(uid) || isStaff();
       allow create: if isOwner(uid);
-      allow update: if isStaff() || (isOwner(uid) &&
-        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['lifetimeValue']));
+      allow update: if isStaff() || (isOwner(uid) && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['lifetimeValue']));
       allow delete: if isAdmin();
     }
     match /projects/{id} {
-      allow read: if ownData('clientId') || isStaff();
-      allow create: if signedIn() && request.resource.data.clientId == request.auth.uid;  // request project
-      allow create: if isStaff();
-      allow update: if isStaff();                             // status/progress updates (admin)
+      allow read: if ownsExisting('clientId') || isStaff();
+      allow create: if (ownsIncoming('clientId') || isStaff());
+      allow update: if isStaff();
       allow delete: if isAdmin();
     }
     match /invoices/{id} {
-      allow read: if ownData('clientId') || isStaff();
-      allow write: if isStaff();
+      allow read: if ownsExisting('clientId') || isStaff();
+      allow create, update, delete: if isStaff();
     }
     match /payments/{id} {
-      allow read: if ownData('clientId') || isStaff();
-      allow create: if signedIn();                            // Paystack callback writes
+      allow read: if ownsExisting('clientId') || isStaff();
+      allow create: if false;
       allow update, delete: if isAdmin();
     }
     match /tickets/{id} {
-      allow read, create: if ownData('clientId') || isStaff();
-      allow update: if isStaff();                             // support team resolves
+      allow read: if ownsExisting('clientId') || isStaff();
+      allow create: if ownsIncoming('clientId') || isStaff();
+      allow update: if isStaff();
       allow delete: if isAdmin();
     }
     match /notifications/{id} {
-      allow read: if ownData('userId') || isStaff();
-      allow write: if isStaff();
+      allow read: if ownsExisting('userId') || isStaff();
+      allow create: if isStaff();
+      allow update: if ownsExisting('userId') || isStaff();
+      allow delete: if isStaff();
     }
     match /messages/{id} {
-      allow read, create: if signedIn();
-      allow update, delete: if isStaff();
+      allow read: if isStaff() || ownsExisting('senderId') || ownsExisting('clientId');
+      allow create: if signedIn() && request.resource.data.senderId == request.auth.uid;
+      allow update: if isStaff() || ownsExisting('senderId');
+      allow delete: if isAdmin();
     }
     match /contracts/{id} {
-      allow read: if ownData('clientId') || isStaff();
+      allow read: if ownsExisting('clientId') || isStaff();
       allow write: if isStaff();
     }
     match /proposals/{id} {
-      allow read: if ownData('clientId') || isStaff();
-      allow write: if isStaff();
+      allow read: if ownsExisting('clientId') || isStaff();
+      allow write: if isStaff() || ownsExisting('clientId');
     }
     match /files/{id} {
-      allow read: if signedIn();
-      allow create: if signedIn()                             // client uploads own files
-        && request.resource.data.clientId == request.auth.uid;
-      allow create: if isStaff();
-      allow delete: if isStaff() || ownData('uploadedBy');
+      allow read: if isStaff() || ownsExisting('clientId') || ownsExisting('uploadedBy');
+      allow create: if isStaff() || ownsIncoming('clientId');
+      allow delete: if isStaff() || ownsExisting('uploadedBy');
     }
 
-    // ---------- COMPANY OPERATIONS (staff only) ----------
-    match /tasks/{id} {
-      allow read, write: if isStaff();
-    }
-    match /employees/{id} {
-      allow read, write: if isStaff();
-    }
+    match /tasks/{id} { allow read, write: if isStaff(); }
+    match /employees/{id} { allow read, write: if isStaff(); }
     match /timeLogs/{id} {
-      allow read, write: if signedIn();                       // staff log own time
-    }
-    match /expenses/{id} {
-      allow read, write: if isStaff();
+      allow read: if isStaff() || ownsExisting('userId');
+      allow create: if isStaff() || ownsIncoming('userId');
+      allow update: if isStaff() || ownsExisting('userId');
       allow delete: if isAdmin();
     }
+    match /expenses/{id} { allow read, write: if isStaff(); allow delete: if isAdmin(); }
 
-    // ---------- DEVELOPER WORKSPACE ----------
     match /repos/{id} { allow read, write: if isStaff(); }
     match /environments/{id} { allow read, write: if isStaff(); }
     match /deployments/{id} { allow read, write: if isStaff(); }
     match /devLogs/{id} { allow read, write: if isStaff(); }
     match /monitors/{id} { allow read, write: if isStaff(); }
-    match /apiKeys/{id} {
-      allow read: if isAdmin();                               // keys visible to admins only
-      allow write: if isAdmin();
-    }
+    match /apiKeys/{id} { allow read, write: if isAdmin(); }
 
-    // ---------- GOVERNANCE ----------
     match /auditLogs/{id} {
       allow read: if isSuper();
-      allow create: if isStaff();                             // apps log actions
+      allow create: if isStaff() && request.resource.data.userId == request.auth.uid;
       allow update, delete: if false;
     }
     match /settings/{id} {
-      allow read: if id == 'general' || signedIn();   // 'general' = public site settings
+      allow read: if id == 'general' || signedIn();
       allow write: if isSuper();
     }
-
-    // ---------- DEFAULT: DENY ----------
-    match /{document=**} {
-      allow read, write: if false;
-    }
+    match /{document=**} { allow read, write: if false; }
   }
 }
