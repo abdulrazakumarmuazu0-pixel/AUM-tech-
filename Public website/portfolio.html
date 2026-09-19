@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio | AUM Technology Company</title>
+<meta name="description" content="Explore our portfolio of web, mobile, software, AI and cloud projects.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2300d4ff'/><text x='50' y='68' font-size='55' text-anchor='middle' fill='white' font-weight='bold'>A</text></svg>">
+<link rel="stylesheet" href="css/style.css">
+<link rel="manifest" href="manifest.json">
+</head>
+<body>
+<header id="header">
+  <nav class="container">
+    <a href="index.html" class="logo"><span class="logo-box">⚡</span>AUM<span class="gradient-text">TECH</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="">Home</a></li>
+      <li><a href="about.html" class="">About</a></li>
+      <li><a href="services.html" class="">Services</a></li>
+      <li><a href="portfolio.html" class="active">Portfolio</a></li>
+      <li><a href="case-studies.html" class="">Case Studies</a></li>
+      <li><a href="blog.html" class="">Blog</a></li>
+      <li><a href="contact.html" class="btn btn-primary nav-cta">Start a Project</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Portfolio</div>
+    <h1>Our <span class="gradient-text">Portfolio</span></h1>
+    <p>A selection of projects we're proud of. Each one built with care, quality, and a focus on results.</p>
+  </div>
+</section>
+
+<section style="padding-top:20px">
+  <div class="container">
+    <div class="filter-bar reveal">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="web">Web</button>
+      <button class="filter-btn" data-filter="mobile">Mobile</button>
+      <button class="filter-btn" data-filter="software">Software</button>
+      <button class="filter-btn" data-filter="ai">AI</button>
+      <button class="filter-btn" data-filter="cloud">Cloud</button>
+    </div>
+    <div class="pf-grid">
+
+      <div class="pf-card reveal" data-cat="web">
+        <div class="pf-thumb" style="background:linear-gradient(135deg,#101a30,#0e2233)">🛒</div>
+        <div class="pf-body">
+          <span class="cat">WEB</span><h3>Kasuwa Online — E-Commerce Platform</h3><p>Full e-commerce store with payments, inventory, and seller dashboard for a retail chain.</p>
+          <div class="pf-tags"><span>Firebase</span><span>Paystack</span><span>JavaScript</span></div>
+        </div>
+      </div>
+
+      <div class="pf-card reveal" data-cat="web">
+        <div class="pf-thumb" style="background:linear-gradient(135deg,#101a30,#0e2233)">🎓</div>
+        <div class="pf-body">
+          <span class="cat">WEB</span><h3>Kalinfa Academy LMS</h3><p>Learning management system with video streaming, quizzes, and multi-language support (EN/HA/AR).</p>
+          <div class="pf-tags"><span>Firebase</span><span>Video</span><span>RTL</span></div>
+        </div>
+      </div>
+
+      <div class="pf-card reveal" data-cat="software">
+        <div class="pf-thumb" style="background:linear-gradient(135deg,#101a30,#0e2233)">🏛️</div>
+        <div class="pf-body">
+          <span class="cat">SOFTWARE</span><h3>Hisbah Management System</h3><p>Complaint management and case tracking system for a government board with admin analytics.</p>
+          <div class="pf-tags"><span>Firestore</span><span>Charts</span><span>Reports</span></div>
+        </div>
+      </div>
+
+      <div class="pf-card reveal" data-cat="mobile">
+        <div class="pf-thumb" style="background:linear-gradient(135deg,#101a30,#0e2233)">📿</div>
+        <div class="pf-body">
+          <span class="cat">MOBILE</span><h3>Tasbeeh Pro</h3><p>Popular Islamic dhikr counter app with dark mode, dua library, and haptic feedback.</p>
+          <div class="pf-tags"><span>Flutter</span><span>50K+ Downloads</span><span>Play Store</span></div>
+        </div>
+      </div>
+
+      <div class="pf-card reveal" data-cat="software">
+        <div class="pf-thumb" style="background:linear-gradient(135deg,#101a30,#0e2233)">📦</div>
+        <div class="pf-body">
+          <span class="cat">SOFTWARE</span><h3>Store Manager Pro</h3><p>Complete inventory, sales, and customer management system with offline support.</p>
+          <div class="pf-tags"><span>JavaScript</span><span>PWA</span><span>Reports</span></div>
+        </div>
+      </div>
+
+      <div class="pf-card reveal" data-cat="ai">
+        <div class="pf-thumb" style="background:linear-gradient(135deg,#101a30,#0e2233)">🤖</div>
+        <div class="pf-body">
+          <span class="cat">AI</span><h3>AI Customer Support Bot</h3><p>WhatsApp chatbot handling 80% of customer inquiries automatically for a logistics company.</p>
+          <div class="pf-tags"><span>NLP</span><span>WhatsApp API</span><span>Automation</span></div>
+        </div>
+      </div>
+
+      <div class="pf-card reveal" data-cat="web">
+        <div class="pf-thumb" style="background:linear-gradient(135deg,#101a30,#0e2233)">📊</div>
+        <div class="pf-body">
+          <span class="cat">WEB</span><h3>Portfolio Admin Suite</h3><p>Admin dashboard with analytics, blog management, media library, and activity logs.</p>
+          <div class="pf-tags"><span>Firebase Auth</span><span>Charts</span><span>CMS</span></div>
+        </div>
+      </div>
+
+      <div class="pf-card reveal" data-cat="cloud">
+        <div class="pf-thumb" style="background:linear-gradient(135deg,#101a30,#0e2233)">☁️</div>
+        <div class="pf-body">
+          <span class="cat">CLOUD</span><h3>Cloud Migration Project</h3><p>Migrated legacy systems to cloud with CI/CD pipelines — 99.9% uptime achieved.</p>
+          <div class="pf-tags"><span>GCP</span><span>Docker</span><span>CI/CD</span></div>
+        </div>
+      </div>
+
+      <div class="pf-card reveal" data-cat="mobile">
+        <div class="pf-thumb" style="background:linear-gradient(135deg,#101a30,#0e2233)">🚚</div>
+        <div class="pf-body">
+          <span class="cat">MOBILE</span><h3>Arewa Logistics App</h3><p>Real-time delivery tracking app with driver and customer interfaces.</p>
+          <div class="pf-tags"><span>Flutter</span><span>Maps</span><span>Real-time</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="cta-band reveal">
+      <div><h2>Like What You See?</h2><p>Your project could be our next success story.</p></div>
+      <a href="contact.html" class="btn btn-white">Start Your Project ➤</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="index.html" class="logo" style="margin-bottom:16px"><span class="logo-box">⚡</span>AUM<span class="gradient-text">TECH</span></a>
+        <p>AUM Technology Company — muna gina kayayyakin software na zamani: web, mobile, AI, da cloud solutions wa kamfanoni a Afirka da duniya baki ɗaya.</p>
+        <div class="socials" style="justify-content:flex-start;margin-top:18px">
+          <a href="#" aria-label="Facebook">f</a><a href="#" aria-label="Twitter">𝕏</a><a href="#" aria-label="LinkedIn">in</a><a href="#" aria-label="Instagram">◎</a><a href="#" aria-label="GitHub">⌥</a>
+        </div>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+          <li><a href="case-studies.html">Case Studies</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="services.html#web">Web Development</a></li>
+          <li><a href="services.html#mobile">Mobile Development</a></li>
+          <li><a href="services.html#software">Software Systems</a></li>
+          <li><a href="services.html#ai">AI Solutions</a></li>
+          <li><a href="services.html#cloud">Cloud & DevOps</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Newsletter</h4>
+        <p>Stay updated with our latest projects and tech insights.</p>
+        <form class="newsletter"><input type="email" placeholder="Your email" required><button type="submit">➤</button></form>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© <span id="year"></span> AUM Technology Company. All rights reserved.</p>
+      <p>Sokoto, Nigeria · <a href="mailto:hello@aumtech.com">hello@aumtech.com</a></p>
+    </div>
+  </div>
+</footer>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="firebase/config.js"></script>
+<script src="js/site-settings.js"></script>
+<script src="js/main.js"></script>
+<script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0){navigator.serviceWorker.register("sw.js").catch(function(){})}</script>
+</body>
+</html>
