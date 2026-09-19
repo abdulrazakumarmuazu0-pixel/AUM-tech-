@@ -105,6 +105,12 @@ document.addEventListener('DOMContentLoaded', () => {
     db.collection('blog').orderBy('createdAt', 'desc').onSnapshot(s => {
       renderBlogAdmin(s.docs);
     }, snapErr('blog'));
+    db.collection('proposals').orderBy('createdAt', 'desc').onSnapshot(s => {
+      renderAdminProposals(s.docs);
+    }, snapErr('proposals'));
+    db.collection('contracts').orderBy('createdAt', 'desc').onSnapshot(s => {
+      renderAdminContracts(s.docs);
+    }, snapErr('contracts'));
 
     /* Add lead form */
     const lf = document.getElementById('addLeadForm');
@@ -179,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const titleInp = document.getElementById('blogTitle');
       titleInp.addEventListener('input', () => {
         const slugEl = document.getElementById('blogSlug');
-        if (!blogForm.id.value) slugEl.value = titleInp.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        if (!blogForm.elements['id'].value) slugEl.value = titleInp.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
       });
       blogForm.addEventListener('submit', async e => {
         e.preventDefault();
@@ -192,16 +198,51 @@ document.addEventListener('DOMContentLoaded', () => {
           d.createdAt = firebase.firestore.FieldValue.serverTimestamp();
           await db.collection('blog').add(d);
         }
-        blogForm.reset(); blogForm.published.checked = true;
+        blogForm.reset(); blogForm.elements['published'].checked = true;
         document.getElementById('blogFormTitle').textContent = '➕ New Blog Post';
         document.getElementById('blogCancelEdit').style.display = 'none';
       });
       document.getElementById('blogCancelEdit')?.addEventListener('click', () => {
-        blogForm.reset(); blogForm.published.checked = true;
+        blogForm.reset(); blogForm.elements['published'].checked = true;
         document.getElementById('blogFormTitle').textContent = '➕ New Blog Post';
         document.getElementById('blogCancelEdit').style.display = 'none';
       });
     }
+
+    /* Proposals & Contracts */
+    const propForm = document.getElementById('addProposalForm');
+    if (propForm) propForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      const d = Object.fromEntries(new FormData(propForm).entries());
+      await db.collection('proposals').add({
+        clientId: d.clientId, title: d.title, scope: d.scope || '',
+        amount: +d.amount, validUntil: d.validUntil || '', status: 'Pending',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      await db.collection('notifications').doc().set({
+        userId: d.clientId, title: '📄 New Proposal: ' + d.title,
+        body: '₦' + (+d.amount).toLocaleString() + ' — open your portal to review & accept.',
+        icon: '📄', read: false, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      propForm.reset();
+      alert('✓ Proposal sent! Client can now accept it in their portal.');
+    });
+    const ctrForm = document.getElementById('addContractForm');
+    if (ctrForm) ctrForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      const d = Object.fromEntries(new FormData(ctrForm).entries());
+      await db.collection('contracts').add({
+        clientId: d.clientId, title: d.title, description: d.description || '', status: 'Awaiting Signature',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      await db.collection('notifications').doc().set({
+        userId: d.clientId, title: '🤝 Contract Ready: ' + d.title,
+        body: 'Please review and sign in your portal.',
+        icon: '🤝', read: false, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      ctrForm.reset();
+      alert('✓ Contract sent for signature!');
+    });
 
     /* CSV exports */
     document.querySelectorAll('[data-export]').forEach(btn => btn.addEventListener('click', () =>
@@ -255,6 +296,12 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ---------- CLIENTS ---------- */
   function renderClients(docs) {
     const tb = document.getElementById('clientsBody');
+    document.querySelectorAll('.dealClientSelect').forEach(sel2 => {
+      sel2.innerHTML = '<option value="">Select client…</option>' + docs.map(d => {
+        const x = d.data();
+        return `<option value="${d.id}">${esc(x.name || 'Client')}${x.company ? ' (' + esc(x.company) + ')' : ''}</option>`;
+      }).join('');
+    });
     const sel = document.getElementById('invClientSelect');
     if (sel) sel.innerHTML = '<option value="">Select client…</option>' + docs.map(d => {
       const x = d.data();
@@ -403,14 +450,33 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!snap.exists) return;
     const x = snap.data();
     const f = document.getElementById('blogForm');
-    f.id.value = id;
-    f.title.value = x.title || ''; f.slug.value = x.slug || '';
-    f.category.value = x.category || 'Web Dev'; f.emoji.value = x.emoji || '';
-    f.excerpt.value = x.excerpt || ''; f.content.value = x.content || '';
-    f.published.checked = !!x.published;
+    f.elements['id'].value = id;
+    f.elements['title'].value = x.title || ''; f.elements['slug'].value = x.slug || '';
+    f.elements['category'].value = x.category || 'Web Dev'; f.elements['emoji'].value = x.emoji || '';
+    f.elements['excerpt'].value = x.excerpt || ''; f.elements['content'].value = x.content || '';
+    f.elements['published'].checked = !!x.published;
     document.getElementById('blogFormTitle').textContent = '✏️ Edit Post';
     document.getElementById('blogCancelEdit').style.display = 'inline-flex';
   };
+
+  /* ---------- ADMIN PROPOSALS & CONTRACTS ---------- */
+  function renderAdminProposals(docs) {
+    const tb = document.getElementById('adminProposalsBody');
+    if (!tb) return;
+    tb.innerHTML = docs.map(d => { const x = d.data(); return `<tr>
+      <td><strong>${esc(x.title)}</strong><br><small style="color:var(--muted)">${esc((x.clientId || '').slice(0, 8))}…</small></td>
+      <td><strong>₦${(x.amount || 0).toLocaleString()}</strong></td>
+      <td><span class="status st-${x.status === 'Accepted' ? 'done' : x.status === 'Declined' ? 'hold' : 'pending'}">${x.status || 'Pending'}</span></td></tr>`; }).join('')
+      || `<tr><td colspan="3"><div class="empty"><div class="big">📄</div>No proposals sent yet.</div></td></tr>`;
+  }
+  function renderAdminContracts(docs) {
+    const tb = document.getElementById('adminContractsBody');
+    if (!tb) return;
+    tb.innerHTML = docs.map(d => { const x = d.data(); return `<tr>
+      <td><strong>${esc(x.title)}</strong><br><small style="color:var(--muted)">${esc((x.clientId || '').slice(0, 8))}…</small></td>
+      <td><span class="status st-${x.status === 'Signed' ? 'done' : 'pending'}">${x.status || 'Awaiting'}</span></td></tr>`; }).join('')
+      || `<tr><td colspan="2"><div class="empty"><div class="big">🤝</div>No contracts sent yet.</div></td></tr>`;
+  }
 
   /* ---------- MESSAGE INBOX ---------- */
   let activeThread = 'general';

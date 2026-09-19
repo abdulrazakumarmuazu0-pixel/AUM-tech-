@@ -45,3 +45,4 @@
   .inbox-wrap{grid-template-columns:1fr;grid-template-rows:220px 1fr;height:calc(100vh - 190px)}
   .inbox-list{border-right:none;border-bottom:1px solid var(--border)}
 }
+@media(max-width:900px){.deals-cols{grid-template-columns:1fr!important}}

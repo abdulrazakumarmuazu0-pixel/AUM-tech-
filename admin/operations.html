@@ -21,6 +21,7 @@
     <button class="side-link" data-tab="projects" data-title="Project Management"><span class="ico">📁</span>Projects</button>
     <button class="side-link" data-tab="inbox" data-title="Message Inbox"><span class="ico">📥</span>Inbox<span class="side-badge" id="inboxBadge">0</span></button>
     <button class="side-link" data-tab="invoices" data-title="Invoices"><span class="ico">🧾</span>Invoices</button>
+    <button class="side-link" data-tab="deals" data-title="Proposals & Contracts"><span class="ico">🤝</span>Proposals & Contracts</button>
     <button class="side-link" data-tab="blog" data-title="Blog Manager"><span class="ico">📝</span>Blog</button>
     <button class="side-link" data-tab="tasks" data-title="Task Board"><span class="ico">✅</span>Tasks</button>
     <div class="side-section">Workspace</div>
@@ -94,6 +95,43 @@
 </div>
 
 
+
+
+<!-- DEALS: PROPOSALS & CONTRACTS -->
+<div class="ptab" id="tab-deals">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px" class="deals-cols">
+    <div class="card">
+      <h3 style="margin-bottom:16px">📄 Send Proposal</h3>
+      <form id="addProposalForm">
+        <div class="form-group"><label>Client</label><select name="clientId" class="dealClientSelect" required></select></div>
+        <div class="form-group"><label>Title *</label><input name="title" required placeholder="e.g. E-Commerce Website Proposal"></div>
+        <div class="form-group"><label>Scope / Details</label><textarea name="scope" placeholder="What's included, timeline, deliverables..."></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label>Amount (₦) *</label><input name="amount" type="number" required></div>
+          <div class="form-group"><label>Valid Until</label><input name="validUntil" type="date"></div>
+        </div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center">Send to Client ➤</button>
+      </form>
+      <div style="margin-top:22px;border-top:1px solid var(--border);padding-top:18px">
+        <h4 style="margin-bottom:12px">Sent Proposals</h4>
+        <div style="overflow-x:auto"><table class="p-table"><thead><tr><th>Title</th><th>Amount</th><th>Status</th></tr></thead><tbody id="adminProposalsBody"></tbody></table></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:16px">🤝 Send Contract</h3>
+      <form id="addContractForm">
+        <div class="form-group"><label>Client</label><select name="clientId" class="dealClientSelect" required></select></div>
+        <div class="form-group"><label>Title *</label><input name="title" required placeholder="e.g. Web Development Agreement"></div>
+        <div class="form-group"><label>Terms / Description</label><textarea name="description" placeholder="Contract terms..."></textarea></div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center">Send for Signature ➤</button>
+      </form>
+      <div style="margin-top:22px;border-top:1px solid var(--border);padding-top:18px">
+        <h4 style="margin-bottom:12px">Sent Contracts</h4>
+        <div style="overflow-x:auto"><table class="p-table"><thead><tr><th>Title</th><th>Status</th></tr></thead><tbody id="adminContractsBody"></tbody></table></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- INVOICES -->
 <div class="ptab" id="tab-invoices">
