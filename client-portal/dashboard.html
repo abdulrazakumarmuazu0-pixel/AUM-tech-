@@ -19,6 +19,9 @@
     <a class="side-link" href="request-project.html"><span class="ico">🚀</span>Request Project</a>
     <div class="side-section">Billing</div>
     <button class="side-link" data-tab="invoices" data-title="Invoices & Payments"><span class="ico">🧾</span>Invoices</button>
+    <button class="side-link" data-tab="proposals" data-title="Proposals"><span class="ico">📄</span>Proposals</button>
+    <button class="side-link" data-tab="contracts" data-title="Contracts"><span class="ico">🤝</span>Contracts</button>
+    <button class="side-link" data-tab="files" data-title="Project Files"><span class="ico">📎</span>Files</button>
     <div class="side-section">Support</div>
     <button class="side-link" data-tab="messages" data-title="Messages"><span class="ico">💬</span>Messages<span class="side-badge" id="msgBadge">1</span></button>
     <button class="side-link" data-tab="tickets" data-title="Support Tickets"><span class="ico">🎫</span>Tickets</button>
@@ -78,7 +81,35 @@
       <p style="color:var(--muted);font-size:.82rem;margin-top:14px">💳 Secure payments via Paystack — card, bank transfer & USSD supported.</p></div>
     </div>
 
-    <!-- MESSAGES -->
+    
+<!-- PROPOSALS -->
+<div class="ptab" id="tab-proposals">
+  <div class="card"><h3 style="margin-bottom:16px">Proposals</h3>
+    <div style="overflow-x:auto"><table class="p-table"><thead><tr><th>Proposal</th><th>Amount</th><th>Valid Until</th><th>Status</th><th></th></tr></thead><tbody id="proposalsBody"></tbody></table></div>
+    <p style="color:var(--muted);font-size:.82rem;margin-top:12px">📄 A ccept proposal ɗin ne kawai yake kiran mu mu fara aiki — kowane canji yana zuwa admin team nan take.</p>
+  </div>
+</div>
+
+<!-- CONTRACTS -->
+<div class="ptab" id="tab-contracts">
+  <div class="card"><h3 style="margin-bottom:16px">Contracts</h3><div id="contractsList"></div></div>
+</div>
+
+<!-- FILES -->
+<div class="ptab" id="tab-files">
+  <div class="card" style="margin-bottom:20px">
+    <h3 style="margin-bottom:14px">📎 Upload File</h3>
+    <form id="fileForm" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+      <input type="file" id="fileInput" required style="flex:2;min-width:200px;background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:12px;color:var(--muted)">
+      <button class="btn btn-primary" style="padding:12px 26px">Upload ➤</button>
+    </form>
+    <p style="color:var(--muted);font-size:.78rem;margin-top:10px">⚠️ Max 700KB per file (briefs, designs, screenshots). Mafi girman files — aika ta WhatsApp.</p>
+    <div class="form-msg" id="fileMsg"></div>
+  </div>
+  <div class="card"><h3 style="margin-bottom:16px">My Files</h3><div id="filesList"></div></div>
+</div>
+
+<!-- MESSAGES -->
     <div class="ptab" id="tab-messages">
       <div class="card"><h3 style="margin-bottom:18px">💬 Messages</h3><p style="color:var(--muted);font-size:.88rem;margin-bottom:16px">Chat directly with your project manager. Replies usually within minutes during business hours.</p>
         <div class="chat-box" id="chatBox"></div>
