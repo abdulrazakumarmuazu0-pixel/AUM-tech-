@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Request Project | AUM Tech Portal</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2300d4ff'/><text x='50' y='68' font-size='55' text-anchor='middle' fill='white' font-weight='bold'>A</text></svg>">
+<link rel="stylesheet" href="../public-website/css/style.css">
+<link rel="stylesheet" href="css/portal.css">
+<link rel="manifest" href="manifest.json">
+</head>
+<body>
+<div class="portal">
+  <aside class="sidebar" id="sideMenu">
+    <a href="../public-website/index.html" class="logo"><span class="logo-box">⚡</span>AUM<span class="gradient-text">TECH</span></a>
+    <div class="side-section">Menu</div>
+    <button class="side-link active" data-tab="overview" data-title="Dashboard Overview"><span class="ico">🏠</span>Dashboard</button>
+    <button class="side-link" data-tab="projects" data-title="My Projects"><span class="ico">📁</span>Projects</button>
+    <a class="side-link" href="request-project.html"><span class="ico">🚀</span>Request Project</a>
+    <div class="side-section">Billing</div>
+    <button class="side-link" data-tab="invoices" data-title="Invoices & Payments"><span class="ico">🧾</span>Invoices</button>
+    <div class="side-section">Support</div>
+    <button class="side-link" data-tab="messages" data-title="Messages"><span class="ico">💬</span>Messages<span class="side-badge" id="msgBadge">1</span></button>
+    <button class="side-link" data-tab="tickets" data-title="Support Tickets"><span class="ico">🎫</span>Tickets</button>
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <span class="user-av" id="userAv">A</span>
+        <div style="min-width:0"><div class="nm" id="userName">...</div><div class="rl" id="userRole">client</div></div>
+      </div>
+      <button class="side-link" id="logoutBtn" style="margin-top:10px"><span class="ico">🚪</span>Logout</button>
+    </div>
+  </aside>
+  <div class="side-overlay" id="sideOverlay"></div>
+  <main class="main-area">
+    <div class="mob-top"><button class="btn btn-ghost" id="mobBurger" style="padding:9px 16px">☰ Menu</button><strong>AUM Tech Portal</strong></div>
+    <div class="topbar"><div><h1 id="pageTitle">Dashboard Overview</h1><div class="crumb">Client Portal / <span id="pageCrumb">Dashboard</span></div></div><div class="bell-wrap">
+        <button id="bellBtn" class="btn btn-ghost" style="padding:11px 15px;position:relative;font-size:1.05rem">🔔<span class="bell-badge" id="bellBadge" style="display:none">0</span></button>
+        <div class="bell-panel" id="bellPanel">
+          <div class="bell-head"><strong>🔔 Notifications</strong><button type="button" id="bellClear">Mark all read</button></div>
+          <div id="bellList"></div>
+        </div>
+      </div>
+      <a href="request-project.html" class="btn btn-primary" style="padding:11px 24px">+ New Project</a></div>
+    
+<div class="card" style="max-width:820px">
+  <h3 style="margin-bottom:8px">🚀 Request a New Project</h3>
+  <p style="color:var(--muted);font-size:.9rem;margin-bottom:28px">Fill in the details below. We'll review your request and send a detailed proposal within 48 hours.</p>
+  <div class="wizard-steps">
+    <div class="wstep active">1 · Basics</div><div class="wstep">2 · Details</div><div class="wstep">3 · Budget</div><div class="wstep">4 · Review</div>
+  </div>
+  <form id="wizardForm">
+    <div class="wpanel active">
+      <div class="form-group"><label>Project Title *</label><input type="text" name="title" required placeholder="e.g. E-Commerce Website for My Store"></div>
+      <div class="form-group"><label>Project Type *</label>
+        <select name="type" required><option value="">Select type...</option><option>Web Development</option><option>Mobile App</option><option>Software System</option><option>AI Solution</option><option>Cloud & DevOps</option><option>Other</option></select></div>
+      <div style="text-align:right"><button type="button" class="btn btn-primary" data-next>Next ➤</button></div>
+    </div>
+    <div class="wpanel">
+      <div class="form-group"><label>Describe Your Project *</label><textarea name="description" required placeholder="What should the project do? Who will use it? Any features you have in mind..."></textarea></div>
+      <div class="form-group"><label>Attachments (optional)</label>
+        <div class="upload-zone">📎 Click to upload briefs, designs, or reference files<input type="file" name="files" multiple hidden></div></div>
+      <div style="display:flex;justify-content:space-between"><button type="button" class="btn btn-ghost" data-prev>⬅ Back</button><button type="button" class="btn btn-primary" data-next>Next ➤</button></div>
+    </div>
+    <div class="wpanel">
+      <div class="form-row">
+        <div class="form-group"><label>Budget Range *</label><select name="budget" required><option value="">Select range...</option><option>Under ₦150,000</option><option>₦150,000 – ₦350,000</option><option>₦350,000 – ₦800,000</option><option>₦800,000 – ₦2,000,000</option><option>₦2,000,000+</option></select></div>
+        <div class="form-group"><label>Desired Deadline</label><input type="date" name="deadline"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between"><button type="button" class="btn btn-ghost" data-prev>⬅ Back</button><button type="button" class="btn btn-primary" data-next>Review ➤</button></div>
+    </div>
+    <div class="wpanel">
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:20px">
+        <h4 style="margin-bottom:12px">📋 Review & Submit</h4>
+        <p style="color:var(--muted);font-size:.88rem">By submitting, you'll create a project request. Our team will review it and contact you with a detailed proposal including scope, timeline, and cost breakdown.</p>
+      </div>
+      <div style="display:flex;justify-content:space-between"><button type="button" class="btn btn-ghost" data-prev>⬅ Back</button><button type="submit" class="btn btn-primary">✓ Submit Request</button></div>
+    </div>
+    <div class="form-msg" id="formMsg"></div>
+  </form>
+</div>
+
+  </main>
+</div>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="../public-website/firebase/config.js"></script>
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script src="js/portal.js"></script>
+<script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0){navigator.serviceWorker.register("sw.js").catch(function(){})}</script>
+</body>
+</html>

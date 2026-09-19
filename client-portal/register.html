@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Account | AUM Tech Client Portal</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2300d4ff'/><text x='50' y='68' font-size='55' text-anchor='middle' fill='white' font-weight='bold'>A</text></svg>">
+<link rel="stylesheet" href="../public-website/css/style.css">
+<link rel="stylesheet" href="css/portal.css">
+<link rel="manifest" href="manifest.json">
+</head>
+<body class="auth-body">
+  <div class="auth-card">
+    <a href="../public-website/index.html" class="logo"><span class="logo-box">⚡</span>AUM<span class="gradient-text">TECH</span></a>
+    
+    <h2>Create Account 🚀</h2>
+    <p class="sub">Join AUM Tech Client Portal — it's free</p>
+    <form id="registerForm">
+      <div class="form-group"><label>Full Name *</label><input type="text" name="name" required placeholder="Your full name"></div>
+      <div class="form-group"><label>Email Address *</label><input type="email" name="email" required placeholder="you@example.com"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Phone</label><input type="tel" name="phone" placeholder="+234 ..."></div>
+        <div class="form-group"><label>Company</label><input type="text" name="company" placeholder="Company name (optional)"></div>
+      </div>
+      <div class="form-group"><label>Password *</label><input type="password" id="password" name="password" required placeholder="Min. 6 characters">
+        <div class="pw-meter"><div></div></div></div>
+      <div class="form-group"><label>Confirm Password *</label><input type="password" name="confirm" required placeholder="Repeat password"></div>
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">Create Account ➤</button>
+      <div class="form-msg" id="formMsg"></div>
+    </form>
+    <p class="auth-alt">Already have an account? <a href="login.html">Sign in</a></p>
+
+  </div>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="../public-website/firebase/config.js"></script>
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script src="js/portal.js"></script>
+<script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0){navigator.serviceWorker.register("sw.js").catch(function(){})}</script>
+</body>
+</html>

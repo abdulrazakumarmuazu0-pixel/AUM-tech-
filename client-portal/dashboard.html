@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard | AUM Tech Portal</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2300d4ff'/><text x='50' y='68' font-size='55' text-anchor='middle' fill='white' font-weight='bold'>A</text></svg>">
+<link rel="stylesheet" href="../public-website/css/style.css">
+<link rel="stylesheet" href="css/portal.css">
+<link rel="manifest" href="manifest.json">
+</head>
+<body>
+<div class="portal">
+  <aside class="sidebar" id="sideMenu">
+    <a href="../public-website/index.html" class="logo"><span class="logo-box">⚡</span>AUM<span class="gradient-text">TECH</span></a>
+    <div class="side-section">Menu</div>
+    <button class="side-link active" data-tab="overview" data-title="Dashboard Overview"><span class="ico">🏠</span>Dashboard</button>
+    <button class="side-link" data-tab="projects" data-title="My Projects"><span class="ico">📁</span>Projects</button>
+    <a class="side-link" href="request-project.html"><span class="ico">🚀</span>Request Project</a>
+    <div class="side-section">Billing</div>
+    <button class="side-link" data-tab="invoices" data-title="Invoices & Payments"><span class="ico">🧾</span>Invoices</button>
+    <div class="side-section">Support</div>
+    <button class="side-link" data-tab="messages" data-title="Messages"><span class="ico">💬</span>Messages<span class="side-badge" id="msgBadge">1</span></button>
+    <button class="side-link" data-tab="tickets" data-title="Support Tickets"><span class="ico">🎫</span>Tickets</button>
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <span class="user-av" id="userAv">A</span>
+        <div style="min-width:0"><div class="nm" id="userName">...</div><div class="rl" id="userRole">client</div></div>
+      </div>
+      <button class="side-link" id="logoutBtn" style="margin-top:10px"><span class="ico">🚪</span>Logout</button>
+    </div>
+  </aside>
+  <div class="side-overlay" id="sideOverlay"></div>
+  <main class="main-area">
+    <div class="mob-top"><button class="btn btn-ghost" id="mobBurger" style="padding:9px 16px">☰ Menu</button><strong>AUM Tech Portal</strong></div>
+    <div class="topbar"><div><h1 id="pageTitle">Dashboard Overview</h1><div class="crumb">Client Portal / <span id="pageCrumb">Dashboard</span></div></div><div class="bell-wrap">
+        <button id="bellBtn" class="btn btn-ghost" style="padding:11px 15px;position:relative;font-size:1.05rem">🔔<span class="bell-badge" id="bellBadge" style="display:none">0</span></button>
+        <div class="bell-panel" id="bellPanel">
+          <div class="bell-head"><strong>🔔 Notifications</strong><button type="button" id="bellClear">Mark all read</button></div>
+          <div id="bellList"></div>
+        </div>
+      </div>
+      <a href="request-project.html" class="btn btn-primary" style="padding:11px 24px">+ New Project</a></div>
+    
+    <!-- OVERVIEW -->
+    <div class="ptab active" id="tab-overview">
+      <div class="stat-cards">
+        <div class="stat-card"><span class="stat-ico" style="background:rgba(0,212,255,.12)">📁</span><div><h3 id="statProjects">0</h3><p>Total Projects</p></div></div>
+        <div class="stat-card"><span class="stat-ico" style="background:rgba(34,224,122,.12)">⚡</span><div><h3 id="statActive">0</h3><p>Active Projects</p></div></div>
+        <div class="stat-card"><span class="stat-ico" style="background:rgba(254,188,46,.12)">🧾</span><div><h3 id="statInvoices">0</h3><p>Pending Invoices</p></div></div>
+        <div class="stat-card"><span class="stat-ico" style="background:rgba(124,58,237,.15)">💰</span><div><h3 id="statAmount">₦0</h3><p>Amount Due</p></div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:22px" class="dash-cols">
+        <div>
+          <div class="card" style="margin-bottom:22px"><h3 style="margin-bottom:18px">Recent Projects</h3><div id="projectList"></div></div>
+          <div class="card"><h3 style="margin-bottom:10px">🎫 Quick Support</h3><p style="color:var(--muted);font-size:.9rem;margin-bottom:16px">Need help? Create a ticket and our team will respond fast.</p>
+            <form id="ticketForm"><div style="display:flex;gap:12px;flex-wrap:wrap">
+              <input name="subject" required placeholder="Subject" style="flex:2;min-width:180px;background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:12px 16px;color:var(--text);font-family:inherit">
+              <select name="category" style="flex:1;min-width:130px;background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:12px;color:var(--text);font-family:inherit"><option>Technical</option><option>Billing</option><option>General</option></select>
+              <button class="btn btn-primary" style="padding:12px 22px">Create</button>
+            </div></form>
+          </div>
+        </div>
+        <div class="card"><h3 style="margin-bottom:14px">🔔 Recent Activity</h3><div id="activityFeed"></div></div>
+      </div>
+    </div>
+
+    <!-- PROJECTS -->
+    <div class="ptab" id="tab-projects">
+      <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px"><h3>All Projects</h3><a href="request-project.html" class="btn btn-primary" style="padding:10px 22px">+ Request Project</a></div>
+      <div style="overflow-x:auto"><table class="p-table"><thead><tr><th>Project</th><th>Type</th><th>Status</th><th>Progress</th><th>Deadline</th></tr></thead><tbody id="projectsBody"></tbody></table></div></div>
+    </div>
+
+    <!-- INVOICES -->
+    <div class="ptab" id="tab-invoices">
+      <div class="card"><h3 style="margin-bottom:18px">Invoices & Payments</h3>
+      <div style="overflow-x:auto"><table class="p-table"><thead><tr><th>Invoice #</th><th>Amount</th><th>Due Date</th><th>Status</th><th>Action</th></tr></thead><tbody id="invoicesBody"></tbody></table></div>
+      <p style="color:var(--muted);font-size:.82rem;margin-top:14px">💳 Secure payments via Paystack — card, bank transfer & USSD supported.</p></div>
+    </div>
+
+    <!-- MESSAGES -->
+    <div class="ptab" id="tab-messages">
+      <div class="card"><h3 style="margin-bottom:18px">💬 Messages</h3><p style="color:var(--muted);font-size:.88rem;margin-bottom:16px">Chat directly with your project manager. Replies usually within minutes during business hours.</p>
+        <div class="chat-box" id="chatBox"></div>
+        <form class="chat-input" id="chatForm"><input id="chatInput" placeholder="Type your message..." autocomplete="off"><button class="btn btn-primary" style="padding:12px 26px">Send ➤</button></form>
+      </div>
+    </div>
+
+    <!-- TICKETS -->
+    <div class="ptab" id="tab-tickets">
+      <div class="card"><h3 style="margin-bottom:18px">Support Tickets</h3>
+      <div style="overflow-x:auto"><table class="p-table"><thead><tr><th>Subject</th><th>Category</th><th>Status</th><th>Created</th></tr></thead><tbody id="ticketsBody"></tbody></table></div></div>
+    </div>
+
+  </main>
+</div>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="../public-website/firebase/config.js"></script>
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script src="js/portal.js"></script>
+<script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0){navigator.serviceWorker.register("sw.js").catch(function(){})}</script>
+</body>
+</html>
