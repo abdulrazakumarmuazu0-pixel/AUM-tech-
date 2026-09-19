@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /client-portal/
+
+Sitemap: https://aumtech.com/sitemap.xml
