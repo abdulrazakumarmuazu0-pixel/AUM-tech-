@@ -1,0 +1,147 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- HELPERS ----------
+    function signedIn() { return request.auth != null; }
+    function role() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+    function isStaff() { return signedIn() && role() in ['staff', 'admin', 'superadmin']; }
+    function isAdmin() { return signedIn() && role() in ['admin', 'superadmin']; }
+    function isSuper() { return signedIn() && role() == 'superadmin'; }
+    function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+    function ownData(field) {
+      return signedIn() && resource.data[field] == request.auth.uid;
+    }
+
+    // ---------- PUBLIC WEBSITE (no auth needed to SUBMIT only) ----------
+    match /leads/{id} {
+      allow create: if true;                    // website + portal contact forms
+      allow read, update: if isStaff();         // CRM access
+      allow delete: if isAdmin();
+    }
+    match /newsletter/{id} {
+      allow create: if true;
+      allow read, delete: if isStaff();
+    }
+    match /blog/{id} {
+      allow read: if true;
+      allow write: if isStaff();
+    }
+    match /portfolio/{id} {
+      allow read: if true;
+      allow write: if isStaff();
+    }
+    match /testimonials/{id} {
+      allow read: if true;
+      allow write: if isStaff();
+    }
+
+    // ---------- USERS & ROLES ----------
+    match /users/{uid} {
+      allow read: if isOwner(uid) || isStaff();              // staff see user list
+      allow create: if isOwner(uid);                          // self-registration
+      allow update: if isOwner(uid)                           // profile edits (not role!)
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'status']);
+      allow update: if isSuper();                             // superadmin: role/status changes
+      allow delete: if isSuper();
+    }
+    match /roles/{id} {
+      allow read: if signedIn();
+      allow write: if isSuper();
+    }
+
+    // ---------- CLIENT DATA (own only) ----------
+    match /clients/{uid} {
+      allow read: if isOwner(uid) || isStaff();
+      allow create: if isOwner(uid);
+      allow update: if isStaff() || (isOwner(uid) &&
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['lifetimeValue']));
+      allow delete: if isAdmin();
+    }
+    match /projects/{id} {
+      allow read: if ownData('clientId') || isStaff();
+      allow create: if signedIn() && request.resource.data.clientId == request.auth.uid;  // request project
+      allow create: if isStaff();
+      allow update: if isStaff();                             // status/progress updates (admin)
+      allow delete: if isAdmin();
+    }
+    match /invoices/{id} {
+      allow read: if ownData('clientId') || isStaff();
+      allow write: if isStaff();
+    }
+    match /payments/{id} {
+      allow read: if ownData('clientId') || isStaff();
+      allow create: if signedIn();                            // Paystack callback writes
+      allow update, delete: if isAdmin();
+    }
+    match /tickets/{id} {
+      allow read, create: if ownData('clientId') || isStaff();
+      allow update: if isStaff();                             // support team resolves
+      allow delete: if isAdmin();
+    }
+    match /notifications/{id} {
+      allow read: if ownData('userId') || isStaff();
+      allow write: if isStaff();
+    }
+    match /messages/{id} {
+      allow read, create: if signedIn();
+      allow update, delete: if isStaff();
+    }
+    match /contracts/{id} {
+      allow read: if ownData('clientId') || isStaff();
+      allow write: if isStaff();
+    }
+    match /proposals/{id} {
+      allow read: if ownData('clientId') || isStaff();
+      allow write: if isStaff();
+    }
+    match /files/{id} {
+      allow read, create: if signedIn();                      // project file sharing
+      allow delete: if isStaff() || ownData('uploadedBy');
+    }
+
+    // ---------- COMPANY OPERATIONS (staff only) ----------
+    match /tasks/{id} {
+      allow read, write: if isStaff();
+    }
+    match /employees/{id} {
+      allow read, write: if isStaff();
+    }
+    match /timeLogs/{id} {
+      allow read, write: if signedIn();                       // staff log own time
+    }
+    match /expenses/{id} {
+      allow read, write: if isStaff();
+      allow delete: if isAdmin();
+    }
+
+    // ---------- DEVELOPER WORKSPACE ----------
+    match /repos/{id} { allow read, write: if isStaff(); }
+    match /environments/{id} { allow read, write: if isStaff(); }
+    match /deployments/{id} { allow read, write: if isStaff(); }
+    match /devLogs/{id} { allow read, write: if isStaff(); }
+    match /monitors/{id} { allow read, write: if isStaff(); }
+    match /apiKeys/{id} {
+      allow read: if isAdmin();                               // keys visible to admins only
+      allow write: if isAdmin();
+    }
+
+    // ---------- GOVERNANCE ----------
+    match /auditLogs/{id} {
+      allow read: if isSuper();
+      allow create: if isStaff();                             // apps log actions
+      allow update, delete: if false;
+    }
+    match /settings/{id} {
+      allow read: if id == 'general' || signedIn();   // 'general' = public site settings
+      allow write: if isSuper();
+    }
+
+    // ---------- DEFAULT: DENY ----------
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
