@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Sign In | AUM Tech Admin</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%237c3aed'/><text x='50' y='68' font-size='55' text-anchor='middle' fill='white' font-weight='bold'>A</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%237c3aed'/><text x='50' y='68' font-size='55' text-anchor='middle'>⚡</text></svg>'>
 <link rel="stylesheet" href="../public-website/css/style.css">
 <link rel="stylesheet" href="../client-portal/css/portal.css">
 <link rel="stylesheet" href="css/admin.css">
@@ -16,19 +16,19 @@
     <h2>Staff Login 🔐</h2>
     <p class="sub">Company Operations — authorized staff only</p>
     <form id="loginForm">
-      <div class="form-group"><label>Email Address</label><input type="email" name="email" required placeholder="staff@aumtech.com"></div>
-      <div class="form-group"><label>Password</label><input type="password" name="password" required placeholder="••••••••"></div>
+      <div class="form-group"><label for="email">Email Address</label><input id="email" type="email" name="email" required autocomplete="username" placeholder="staff@aumtech.com"></div>
+      <div class="form-group"><label for="password">Password</label><input id="password" type="password" name="password" required autocomplete="current-password" placeholder="••••••••"></div>
       <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">Sign In ➤</button>
-      <div class="form-msg" id="formMsg"></div>
+      <div class="form-msg" id="formMsg" role="alert"></div>
     </form>
-    <div class="auth-demo">💡 <strong>First-run setup:</strong> shiga da account ɗinka na musamman — shi zai zama <strong>superadmin</strong> na farko a cikin tsarin.</div>
+    <div class="auth-demo">🔐 Use the Firebase account assigned to you by the Super Admin.</div>
     <p class="auth-alt" style="margin-top:14px">Client? <a href="../client-portal/login.html">Client portal →</a></p>
   </div>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script src="../public-website/firebase/config.js"></script>
-<script src="js/admin.js"></script>
+<script src="js/admin-login.js"></script>
 <script>if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0){navigator.serviceWorker.register("sw.js").catch(function(){})}</script>
 </body>
 </html>
