@@ -2,16 +2,30 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     function signedIn() { return request.auth != null; }
-    function userExists() { return signedIn() && exists(/databases/$(database)/documents/users/$(request.auth.uid)); }
+    function userExists() {
+      return signedIn() && exists(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
     function role() {
-      return userExists() ? get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role : null;
+      return userExists()
+        ? get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role
+        : null;
+    }
+    function validRole(value) {
+      return value in ['client', 'staff', 'admin', 'superadmin'];
+    }
+    function validStatus(value) {
+      return value in ['active', 'suspended'];
     }
     function isStaff() { return role() in ['staff', 'admin', 'superadmin']; }
     function isAdmin() { return role() in ['admin', 'superadmin']; }
     function isSuper() { return role() == 'superadmin'; }
     function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
-    function ownsExisting(field) { return signedIn() && resource.data[field] == request.auth.uid; }
-    function ownsIncoming(field) { return signedIn() && request.resource.data[field] == request.auth.uid; }
+    function ownsExisting(field) {
+      return signedIn() && resource.data[field] == request.auth.uid;
+    }
+    function ownsIncoming(field) {
+      return signedIn() && request.resource.data[field] == request.auth.uid;
+    }
 
     match /leads/{id} {
       allow create: if request.resource.data.keys().hasAll(['name', 'email'])
@@ -28,12 +42,25 @@ service cloud.firestore {
     match /testimonials/{id} { allow read: if true; allow write: if isStaff(); }
 
     match /users/{uid} {
+      // A client may create only its own client profile.
+      // Staff accounts are created by a verified superadmin from the Super Admin page.
+      allow create: if (isOwner(uid)
+        && request.resource.data.role == 'client')
+        || (isSuper()
+          && validRole(request.resource.data.role)
+          && validStatus(request.resource.data.status));
+
       allow read: if isOwner(uid) || isStaff();
-      allow create: if isOwner(uid)
-        && request.resource.data.role == 'client';
+
+      // Superadmin can change another user's role/status, but cannot remove its own access.
       allow update: if isSuper()
-        || (isOwner(uid) && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'status']));
-      allow delete: if isSuper();
+        && uid != request.auth.uid
+        && validRole(request.resource.data.role)
+        && validStatus(request.resource.data.status)
+        || (isOwner(uid)
+          && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'status']));
+
+      allow delete: if isSuper() && uid != request.auth.uid;
     }
     match /roles/{id} { allow read: if signedIn(); allow write: if isSuper(); }
 
@@ -45,7 +72,7 @@ service cloud.firestore {
     }
     match /projects/{id} {
       allow read: if ownsExisting('clientId') || isStaff();
-      allow create: if (ownsIncoming('clientId') || isStaff());
+      allow create: if ownsIncoming('clientId') || isStaff();
       allow update: if isStaff();
       allow delete: if isAdmin();
     }
